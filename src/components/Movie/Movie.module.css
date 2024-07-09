@@ -1,0 +1,24 @@
+.movie {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.622);
+}
+
+.imageContainer {
+  height: 80%;
+}
+
+.image {
+  height: 100%;
+  object-fit: contain;
+}
+
+.movieShortDescr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 1em;
+}
