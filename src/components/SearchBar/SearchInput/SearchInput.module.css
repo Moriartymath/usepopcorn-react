@@ -1,0 +1,20 @@
+.search {
+  font-size: 1.2em;
+  padding: 0.5em 0.7em;
+  width: 30%;
+  border-radius: 0.4em;
+  border-width: 0;
+  background-color: rgb(114, 86, 234);
+  color: white;
+  box-shadow: 0px 0px 9px 1px rgb(19 19 19 / 16%);
+}
+
+.search::placeholder {
+  color: rgba(255, 255, 255, 0.61);
+}
+
+.search:focus,
+.search:active {
+  outline: 0;
+  transform: translateY(-2%);
+}
