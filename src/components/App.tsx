@@ -57,8 +57,8 @@ function App() {
   return (
     <div className={styles.App}>
       <SearchBar inputText={inputText} setInputText={setInputText} />
-      <main>
-        <MovieList />
+      <main className={styles.main}>
+        <MovieList movieList={tempMovieData} />
         <WatchedMovieList />
       </main>
     </div>

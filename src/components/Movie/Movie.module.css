@@ -1,13 +1,16 @@
 .movie {
   display: flex;
   flex-direction: row;
+  border-bottom: 1px solid rgb(255 255 255 / 21%);
+  height: 15%;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.622);
+  column-gap: 2em;
+  color: white;
 }
 
 .imageContainer {
-  height: 80%;
+  height: 70%;
+  padding-left: 2.5em;
 }
 
 .image {
@@ -18,7 +21,6 @@
 .movieShortDescr {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   row-gap: 1em;
 }
