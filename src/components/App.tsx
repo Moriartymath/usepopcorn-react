@@ -53,13 +53,30 @@ const tempWatchedData = [
 
 function App() {
   const [inputText, setInputText] = useState("");
+  const [selectMovieId, setSelectedMovieId] = useState(null);
 
   return (
     <div className={styles.App}>
       <SearchBar inputText={inputText} setInputText={setInputText} />
       <main className={styles.main}>
-        <MovieList movieList={tempMovieData} />
-        <WatchedMovieList watchedMovieList={tempWatchedData} />
+        <MovieList
+          movieList={tempMovieData}
+          setSelectedMovieId={setSelectedMovieId}
+          isFullStats={false}
+        />
+        {selectMovieId ? (
+          <h1>
+            {
+              tempMovieData.find((movie) => movie.imdbID === selectMovieId)
+                .Title
+            }
+          </h1>
+        ) : (
+          <WatchedMovieList
+            watchedMovieList={tempWatchedData}
+            setSelectedMovieId={setSelectedMovieId}
+          />
+        )}
       </main>
     </div>
   );

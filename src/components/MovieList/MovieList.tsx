@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Movie from "../Movie/Movie.tsx";
 import styles from "./MovieList.module.css";
+import ColapseButton from "../ColapseButton/ColapseButton.tsx";
 
 type MovieListProps = {
   movieList: Array<{
@@ -8,20 +9,25 @@ type MovieListProps = {
     Title: string;
     Year: string;
     Poster: string;
+    runtime?: number;
+    imdbRating?: number;
+    userRating?: number;
   }>;
   statsJSX?: React.ReactElement;
+  setSelectedMovieId: Function;
+  isFullStats: boolean;
 };
 
-function MovieList({ movieList, statsJSX }: MovieListProps) {
+function MovieList({
+  movieList,
+  statsJSX,
+  isFullStats,
+  setSelectedMovieId,
+}: MovieListProps) {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <ul className={styles.list}>
-      <button
-        className={styles.closeButton}
-        onClick={() => setIsOpen((currState) => !currState)}
-      >
-        {isOpen ? <>&minus;</> : <>&#x2b;</>}
-      </button>
+      <ColapseButton isOpen={isOpen} setIsOpen={setIsOpen} />
 
       {statsJSX ? statsJSX : null}
 
@@ -30,7 +36,20 @@ function MovieList({ movieList, statsJSX }: MovieListProps) {
             <Movie
               title={movie.Title}
               poster={movie.Poster}
-              stats={`🗓️ ${movie.Year}`}
+              stats={
+                isFullStats ? (
+                  <>
+                    <p>⭐️ {movie.imdbRating}</p>
+                    <p>🌟 {movie.userRating}</p>
+                    <p>⏳ {movie.runtime} min</p>
+                  </>
+                ) : (
+                  <p>🗓️ {movie.Year}</p>
+                )
+              }
+              key={movie.imdbID}
+              imbdID={movie.imdbID}
+              setSelectedMovieId={setSelectedMovieId}
             />
           ))
         : null}

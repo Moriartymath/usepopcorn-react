@@ -11,9 +11,13 @@ type WatchedMovieListProps = {
     imdbRating: number;
     userRating: number;
   }>;
+  setSelectedMovieId: Function;
 };
 
-function WatchedMovieList({ watchedMovieList }: WatchedMovieListProps) {
+function WatchedMovieList({
+  watchedMovieList,
+  setSelectedMovieId,
+}: WatchedMovieListProps) {
   const avrgDuration = watchedMovieList.reduce(
     (acc, movie) => acc + movie.runtime / watchedMovieList.length,
     0
@@ -35,6 +39,8 @@ function WatchedMovieList({ watchedMovieList }: WatchedMovieListProps) {
     <>
       <MovieList
         movieList={watchedMovieList}
+        setSelectedMovieId={setSelectedMovieId}
+        isFullStats={true}
         statsJSX={
           <li className={styles.statsDescription}>
             <h3>MOVIES YOU WATCHED</h3>

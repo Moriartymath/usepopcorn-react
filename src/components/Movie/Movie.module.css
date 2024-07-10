@@ -6,6 +6,7 @@
   align-items: center;
   column-gap: 2em;
   color: white;
+  transition: all 0.1s ease-in-out;
 }
 
 .imageContainer {
@@ -23,4 +24,13 @@
   flex-direction: column;
   justify-content: center;
   row-gap: 1em;
+}
+
+.movie:hover {
+  background-color: rgba(255, 228, 196, 0.035);
+}
+
+.movieStats {
+  display: flex;
+  column-gap: 1em;
 }

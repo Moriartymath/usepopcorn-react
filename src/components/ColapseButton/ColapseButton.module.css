@@ -1,0 +1,12 @@
+.closeButton {
+  width: fit-content;
+  background-color: gray;
+  border-radius: 50%;
+  border: 0;
+  width: 1.1em;
+  height: 1.1em;
+  font-size: 1.5em;
+  align-self: flex-end;
+  position: fixed;
+  margin-right: 0.3em;
+}
