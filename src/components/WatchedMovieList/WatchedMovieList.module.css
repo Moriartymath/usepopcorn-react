@@ -1,0 +1,17 @@
+.statsDescription {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2.5em;
+  height: 15%;
+  justify-content: center;
+  color: white;
+  row-gap: 1em;
+  background-color: #525252;
+}
+
+.allStats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 1em;
+}

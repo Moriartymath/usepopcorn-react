@@ -9,9 +9,10 @@ type MovieListProps = {
     Year: string;
     Poster: string;
   }>;
+  statsJSX?: React.ReactElement;
 };
 
-function MovieList({ movieList }: MovieListProps) {
+function MovieList({ movieList, statsJSX }: MovieListProps) {
   const [isOpen, setIsOpen] = useState(true);
   return (
     <ul className={styles.list}>
@@ -21,6 +22,9 @@ function MovieList({ movieList }: MovieListProps) {
       >
         {isOpen ? <>&minus;</> : <>&#x2b;</>}
       </button>
+
+      {statsJSX ? statsJSX : null}
+
       {isOpen
         ? movieList.map((movie) => (
             <Movie

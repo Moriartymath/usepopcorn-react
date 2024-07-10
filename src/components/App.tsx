@@ -59,7 +59,7 @@ function App() {
       <SearchBar inputText={inputText} setInputText={setInputText} />
       <main className={styles.main}>
         <MovieList movieList={tempMovieData} />
-        <WatchedMovieList />
+        <WatchedMovieList watchedMovieList={tempWatchedData} />
       </main>
     </div>
   );
