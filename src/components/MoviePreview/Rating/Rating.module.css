@@ -1,5 +1,7 @@
 .ratingList {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 1em;
   list-style: none;
   font-size: larger;
   user-select: none;

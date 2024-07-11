@@ -55,6 +55,7 @@ const tempWatchedData = [
 function App() {
   const [inputText, setInputText] = useState("");
   const [selectMovieId, setSelectedMovieId] = useState(null);
+  const [watchedList, setWatchedList] = useState([]);
 
   return (
     <div className={styles.App}>
@@ -70,6 +71,8 @@ function App() {
             movieObj={tempWatchedData.find(
               (movie) => movie.imdbID === selectMovieId
             )}
+            watchedList={watchedList}
+            setWatchedList={setWatchedList}
           />
         ) : (
           <WatchedMovieList

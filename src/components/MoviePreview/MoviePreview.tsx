@@ -4,6 +4,8 @@ import styles from "./MoviePreview.module.css";
 import Rating from "./Rating/Rating.tsx";
 
 type MoviePreviewProps = {
+  watchedList: any[];
+  setWatchedList: Function;
   movieObj: {
     imdbID: string;
     Title: string;
@@ -15,7 +17,11 @@ type MoviePreviewProps = {
   };
 };
 
-function MoviePreview({ movieObj }: MoviePreviewProps) {
+function MoviePreview({
+  movieObj,
+  watchedList,
+  setWatchedList,
+}: MoviePreviewProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [userRatingScore, setUserRatingScore] = useState(null);
 
@@ -45,6 +51,9 @@ function MoviePreview({ movieObj }: MoviePreviewProps) {
         <Rating
           userRatingScore={userRatingScore}
           setUserRatingScore={setUserRatingScore}
+          watchedList={watchedList}
+          setWatchedList={setWatchedList}
+          movieObj={movieObj}
         />
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus,
