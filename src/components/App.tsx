@@ -3,6 +3,7 @@ import styles from "./App.module.css";
 import MovieList from "./MovieList/MovieList.tsx";
 import SearchBar from "./SearchBar/SearchBar.tsx";
 import WatchedMovieList from "./WatchedMovieList/WatchedMovieList.tsx";
+import MoviePreview from "./MoviePreview/MoviePreview.tsx";
 
 const tempMovieData = [
   {
@@ -65,12 +66,11 @@ function App() {
           isFullStats={false}
         />
         {selectMovieId ? (
-          <h1>
-            {
-              tempMovieData.find((movie) => movie.imdbID === selectMovieId)
-                .Title
-            }
-          </h1>
+          <MoviePreview
+            movieObj={tempWatchedData.find(
+              (movie) => movie.imdbID === selectMovieId
+            )}
+          />
         ) : (
           <WatchedMovieList
             watchedMovieList={tempWatchedData}

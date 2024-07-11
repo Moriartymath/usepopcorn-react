@@ -1,0 +1,42 @@
+.preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 40%;
+  background-color: rgb(43, 47, 51);
+  border-radius: 1em;
+  box-shadow: 0 0 13px 0px #0000003b;
+  color: white;
+}
+.imageContainer {
+  height: 100%;
+}
+
+.image {
+  height: 100%;
+  object-fit: contain;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2em;
+  height: 30%;
+}
+
+.shortDescripton {
+  padding-top: 1.5em;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2em;
+}
+
+.movieInfo {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.3em;
+}
+
+.main {
+  padding: 0 2em;
+}
