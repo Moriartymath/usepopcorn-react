@@ -1,0 +1,18 @@
+.ratingList {
+  display: flex;
+  list-style: none;
+  font-size: larger;
+  user-select: none;
+  cursor: pointer;
+  width: fit-content;
+  padding: 0.7em 1.5em;
+  border-radius: 1em;
+  justify-content: center;
+  column-gap: 0.2em;
+  background-color: rgb(49 58 60);
+}
+
+.ratingNumber {
+  width: 1em;
+  padding: 0 2em 0 1em;
+}

@@ -17,6 +17,8 @@ type MoviePreviewProps = {
 
 function MoviePreview({ movieObj }: MoviePreviewProps) {
   const [isOpen, setIsOpen] = useState(true);
+  const [userRatingScore, setUserRatingScore] = useState(null);
+
   return (
     <div className={styles.preview}>
       <ColapseButton isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -40,7 +42,10 @@ function MoviePreview({ movieObj }: MoviePreviewProps) {
         </div>
       </header>
       <main className={styles.main}>
-        <Rating />
+        <Rating
+          userRatingScore={userRatingScore}
+          setUserRatingScore={setUserRatingScore}
+        />
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus,
           quae iure sint ullam voluptates magni cum eligendi ipsum neque
