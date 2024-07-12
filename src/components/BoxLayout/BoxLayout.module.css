@@ -1,0 +1,11 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 1em 0;
+  background-color: rgb(43, 47, 51);
+  height: 100%;
+  overflow-y: auto;
+  width: 40%;
+  border-radius: 1em;
+  box-shadow: 0 0 13px 0px #0000003b;
+}

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ColapseButton from "../ColapseButton/ColapseButton.tsx";
 import styles from "./MoviePreview.module.css";
 import Rating from "./Rating/Rating.tsx";
 
@@ -27,7 +26,6 @@ function MoviePreview({
 
   return (
     <div className={styles.preview}>
-      <ColapseButton isOpen={isOpen} setIsOpen={setIsOpen} />
       <header className={styles.header}>
         <div className={styles.imageContainer}>
           <img

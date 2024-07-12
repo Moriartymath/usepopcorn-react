@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./App.module.css";
 import MovieList from "./MovieList/MovieList.tsx";
 import SearchBar from "./SearchBar/SearchBar.tsx";
 import WatchedMovieList from "./WatchedMovieList/WatchedMovieList.tsx";
 import MoviePreview from "./MoviePreview/MoviePreview.tsx";
+import SearchInput from "./SearchBar/SearchInput/SearchInput.tsx";
+import SearchStats from "./SearchBar/SearchStats/SearchStats.tsx";
+import BoxLayout from "./BoxLayout/BoxLayout.tsx";
 
 const tempMovieData = [
   {
@@ -56,30 +59,38 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [selectMovieId, setSelectedMovieId] = useState(null);
   const [watchedList, setWatchedList] = useState([]);
+  const [movieList, setMovieList] = useState([]);
 
   return (
     <div className={styles.App}>
-      <SearchBar inputText={inputText} setInputText={setInputText} />
+      <SearchBar>
+        <SearchInput inputText={inputText} setInputText={setInputText} />
+        <SearchStats amount={tempMovieData.length} />
+      </SearchBar>
       <main className={styles.main}>
-        <MovieList
-          movieList={tempMovieData}
-          setSelectedMovieId={setSelectedMovieId}
-          isFullStats={false}
-        />
-        {selectMovieId ? (
-          <MoviePreview
-            movieObj={tempWatchedData.find(
-              (movie) => movie.imdbID === selectMovieId
-            )}
-            watchedList={watchedList}
-            setWatchedList={setWatchedList}
-          />
-        ) : (
-          <WatchedMovieList
-            watchedMovieList={tempWatchedData}
+        <BoxLayout>
+          <MovieList
+            movieList={tempMovieData}
             setSelectedMovieId={setSelectedMovieId}
+            isFullStats={false}
           />
-        )}
+        </BoxLayout>
+        <BoxLayout>
+          {selectMovieId ? (
+            <MoviePreview
+              movieObj={tempWatchedData.find(
+                (movie) => movie.imdbID === selectMovieId
+              )}
+              watchedList={watchedList}
+              setWatchedList={setWatchedList}
+            />
+          ) : (
+            <WatchedMovieList
+              watchedMovieList={tempWatchedData}
+              setSelectedMovieId={setSelectedMovieId}
+            />
+          )}
+        </BoxLayout>
       </main>
     </div>
   );

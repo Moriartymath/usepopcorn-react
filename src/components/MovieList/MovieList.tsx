@@ -24,35 +24,30 @@ function MovieList({
   isFullStats,
   setSelectedMovieId,
 }: MovieListProps) {
-  const [isOpen, setIsOpen] = useState(true);
   return (
     <ul className={styles.list}>
-      <ColapseButton isOpen={isOpen} setIsOpen={setIsOpen} />
-
       {statsJSX ? statsJSX : null}
 
-      {isOpen
-        ? movieList.map((movie) => (
-            <Movie
-              title={movie.Title}
-              poster={movie.Poster}
-              stats={
-                isFullStats ? (
-                  <>
-                    <p>⭐️ {movie.imdbRating}</p>
-                    <p>🌟 {movie.userRating}</p>
-                    <p>⏳ {movie.runtime} min</p>
-                  </>
-                ) : (
-                  <p>🗓️ {movie.Year}</p>
-                )
-              }
-              key={movie.imdbID}
-              imbdID={movie.imdbID}
-              setSelectedMovieId={setSelectedMovieId}
-            />
-          ))
-        : null}
+      {movieList.map((movie) => (
+        <Movie
+          title={movie.Title}
+          poster={movie.Poster}
+          stats={
+            isFullStats ? (
+              <>
+                <p>⭐️ {movie.imdbRating}</p>
+                <p>🌟 {movie.userRating}</p>
+                <p>⏳ {movie.runtime} min</p>
+              </>
+            ) : (
+              <p>🗓️ {movie.Year}</p>
+            )
+          }
+          key={movie.imdbID}
+          imbdID={movie.imdbID}
+          setSelectedMovieId={setSelectedMovieId}
+        />
+      ))}
     </ul>
   );
 }
