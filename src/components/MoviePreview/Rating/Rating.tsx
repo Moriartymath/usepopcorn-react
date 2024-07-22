@@ -1,24 +1,19 @@
 import { useState } from "react";
 import styles from "./Rating.module.css";
 import RatingStar from "./RatingStar/RatingStar.tsx";
-import AddToWatchedList from "./AddToWatchedList/AddToWatchedList.tsx";
 
 const maxRating = 10;
 
 type RatingProps = {
-  movieObj: {};
-  watchedList: any[];
-  setWatchedList: Function;
   userRatingScore: number;
   setUserRatingScore: Function;
+  children: any;
 };
 
 function Rating({
   userRatingScore,
   setUserRatingScore,
-  watchedList,
-  setWatchedList,
-  movieObj,
+  children,
 }: RatingProps) {
   const [rating, setRating] = useState(0);
 
@@ -41,9 +36,7 @@ function Rating({
       <span className={styles.ratingNumber}>{`${
         userRatingScore ? userRatingScore : rating
       }/${maxRating}`}</span>
-      {userRatingScore !== null ? (
-        <AddToWatchedList setWatchedList={setWatchedList} movieObj={movieObj} />
-      ) : null}
+      {userRatingScore !== null ? children : null}
     </ul>
   );
 }

@@ -1,28 +1,79 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./MoviePreview.module.css";
 import Rating from "./Rating/Rating.tsx";
+import AddToWatchedList from "./Rating/AddToWatchedList/AddToWatchedList.tsx";
+import axios from "axios";
 
 type MoviePreviewProps = {
-  watchedList: any[];
+  imdbId: string;
   setWatchedList: Function;
-  movieObj: {
-    imdbID: string;
-    Title: string;
-    Year: string;
-    Poster: string;
-    runtime: number;
-    imdbRating: number;
-    userRating: number;
-  };
 };
 
-function MoviePreview({
-  movieObj,
-  watchedList,
-  setWatchedList,
-}: MoviePreviewProps) {
-  const [isOpen, setIsOpen] = useState(true);
+type MovieObj = {
+  imdbID?: string;
+  Title?: string;
+  Year?: string;
+  Poster?: string;
+  runtime?: number;
+  imdbRating?: number;
+  userRating?: number;
+  Genre: string;
+  Released: string;
+  Plot: string;
+};
+
+function MoviePreview({ imdbId, setWatchedList }: MoviePreviewProps) {
   const [userRatingScore, setUserRatingScore] = useState(null);
+  const [movieObj, setMovieObj] = useState(null) as [MovieObj, Function];
+
+  useEffect(() => {
+    console.log("PREVIEW EFFECT CALLED!");
+    const cancelToken = axios.CancelToken.source();
+
+    axios
+      .get(`http://www.omdbapi.com/?apikey=120a7fbf&i=${imdbId}`, {
+        cancelToken: cancelToken.token,
+      })
+      .then((res) => {
+        console.log(imdbId);
+        console.log(res.data);
+        const data = res.data;
+        setMovieObj({
+          Title: data.Title,
+          Year: data.Year,
+          Poster: data.Poster,
+          runtime: data.Runtime,
+          imdbRating: data.imdbRating,
+          userRating: userRatingScore,
+          Genre: data.Genre,
+          Released: data.Released,
+          Plot: data.Plot,
+        });
+      })
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          console.log("Cancel preview!");
+        } else console.log(err);
+      });
+    return () => {
+      console.log("CLEANUP FUNCTION CALLED!");
+      cancelToken.cancel("Canceling");
+      setMovieObj(null);
+      setUserRatingScore(null);
+    };
+  }, [setMovieObj, imdbId]);
+
+  if (!movieObj)
+    return (
+      <img
+        src="spinner.svg"
+        style={{
+          alignSelf: "center",
+          position: "relative",
+          top: "35%",
+        }}
+      />
+    );
 
   return (
     <div className={styles.preview}>
@@ -38,9 +89,9 @@ function MoviePreview({
           <h2>{movieObj.Title}</h2>
           <div className={styles.movieInfo}>
             <p>
-              16 Jul {movieObj.Year} · {movieObj.runtime} min
+              {movieObj.Released} · {movieObj.runtime}
             </p>
-            <p>Action, Adventure, Sci-Fi</p>
+            <p>{movieObj.Genre}</p>
             <p>⭐️ {movieObj.imdbRating} IMDb rating</p>
           </div>
         </div>
@@ -49,16 +100,13 @@ function MoviePreview({
         <Rating
           userRatingScore={userRatingScore}
           setUserRatingScore={setUserRatingScore}
-          watchedList={watchedList}
-          setWatchedList={setWatchedList}
-          movieObj={movieObj}
-        />
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus,
-          quae iure sint ullam voluptates magni cum eligendi ipsum neque
-          doloribus repellendus aperiam incidunt quos quasi facere, eius dicta
-          natus quibusdam?
-        </p>
+        >
+          <AddToWatchedList
+            movieObj={movieObj}
+            setWatchedList={setWatchedList}
+          />
+        </Rating>
+        <p>{movieObj.Plot}</p>
       </main>
     </div>
   );

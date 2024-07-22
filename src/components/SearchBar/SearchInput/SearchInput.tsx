@@ -6,6 +6,7 @@ type SearchInputProps = {
 };
 
 function SearchInput({ inputText, setInputText }: SearchInputProps) {
+  
   return (
     <input
       type="text"

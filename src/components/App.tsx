@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState, useTransition } from "react";
 import styles from "./App.module.css";
 import MovieList from "./MovieList/MovieList.tsx";
 import SearchBar from "./SearchBar/SearchBar.tsx";
@@ -7,6 +7,7 @@ import MoviePreview from "./MoviePreview/MoviePreview.tsx";
 import SearchInput from "./SearchBar/SearchInput/SearchInput.tsx";
 import SearchStats from "./SearchBar/SearchStats/SearchStats.tsx";
 import BoxLayout from "./BoxLayout/BoxLayout.tsx";
+import axios from "axios";
 
 const tempMovieData = [
   {
@@ -61,6 +62,28 @@ function App() {
   const [watchedList, setWatchedList] = useState([]);
   const [movieList, setMovieList] = useState([]);
 
+  console.count("Component is RE-RENDERED!");
+
+  useEffect(() => {
+    const cancelToken = axios.CancelToken.source();
+
+    axios
+      .get(`http://www.omdbapi.com/?apikey=120a7fbf&s=${inputText}`, {
+        cancelToken: cancelToken.token,
+      })
+      .then(
+        (res) => {
+          console.log(res.data);
+          setMovieList(res.data.Search || []);
+        },
+        (err) => console.count(err)
+      );
+    return () => {
+      cancelToken.cancel("Cancelled!");
+      setMovieList([]);
+    };
+  }, [inputText, setMovieList]);
+
   return (
     <div className={styles.App}>
       <SearchBar>
@@ -69,24 +92,47 @@ function App() {
       </SearchBar>
       <main className={styles.main}>
         <BoxLayout>
-          <MovieList
-            movieList={tempMovieData}
-            setSelectedMovieId={setSelectedMovieId}
-            isFullStats={false}
-          />
+          {movieList.length !== 0 && inputText ? (
+            <MovieList
+              movieList={movieList}
+              setSelectedMovieId={setSelectedMovieId}
+              isFullStats={false}
+            />
+          ) : !inputText && movieList.length === 0 ? (
+            <h2
+              style={{
+                color: "white",
+                alignSelf: "center",
+                position: "relative",
+                top: "45%",
+              }}
+            >
+              {"Start typing 🔎"}
+            </h2>
+          ) : (
+            <img
+              src="spinner.svg"
+              style={{
+                alignSelf: "center",
+                position: "relative",
+                top: "35%",
+              }}
+            />
+          )}
         </BoxLayout>
         <BoxLayout>
           {selectMovieId ? (
             <MoviePreview
-              movieObj={tempWatchedData.find(
-                (movie) => movie.imdbID === selectMovieId
-              )}
-              watchedList={watchedList}
+              imdbId={
+                [...watchedList, ...movieList].find(
+                  (movie) => movie.imdbID === selectMovieId
+                ).imdbID
+              }
               setWatchedList={setWatchedList}
             />
           ) : (
             <WatchedMovieList
-              watchedMovieList={tempWatchedData}
+              watchedMovieList={watchedList}
               setSelectedMovieId={setSelectedMovieId}
             />
           )}
