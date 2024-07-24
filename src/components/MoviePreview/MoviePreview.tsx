@@ -3,51 +3,48 @@ import styles from "./MoviePreview.module.css";
 import Rating from "./Rating/Rating.tsx";
 import AddToWatchedList from "./Rating/AddToWatchedList/AddToWatchedList.tsx";
 import axios from "axios";
+import spinner from "../../assets/spinner.svg";
+import buttonStyles from "../ColapseButton/ColapseButton.module.css";
+import MovieType from "../../Types/MovieType.tsx";
 
 type MoviePreviewProps = {
   imdbId: string;
   setWatchedList: Function;
-};
-
-type MovieObj = {
-  imdbID?: string;
-  Title?: string;
-  Year?: string;
-  Poster?: string;
-  runtime?: number;
-  imdbRating?: number;
+  setSelectedMovieId: Function;
   userRating?: number;
-  Genre: string;
-  Released: string;
-  Plot: string;
 };
 
-function MoviePreview({ imdbId, setWatchedList }: MoviePreviewProps) {
+function MoviePreview({
+  imdbId,
+  setWatchedList,
+  setSelectedMovieId,
+  userRating = null,
+}: MoviePreviewProps) {
   const [userRatingScore, setUserRatingScore] = useState(null);
-  const [movieObj, setMovieObj] = useState(null) as [MovieObj, Function];
-
+  const [movieObj, setMovieObj] = useState(null) as [MovieType, Function];
+  console.log(userRating);
   useEffect(() => {
-    console.log("PREVIEW EFFECT CALLED!");
     const cancelToken = axios.CancelToken.source();
+    console.log(userRatingScore);
 
     axios
       .get(`http://www.omdbapi.com/?apikey=120a7fbf&i=${imdbId}`, {
         cancelToken: cancelToken.token,
       })
       .then((res) => {
-        console.log(imdbId);
-        console.log(res.data);
         const data = res.data;
+        console.log(data);
         setMovieObj({
           Title: data.Title,
           Year: data.Year,
           Poster: data.Poster,
           runtime: data.Runtime,
           imdbRating: data.imdbRating,
-          userRating: userRatingScore,
+          userRating: userRating || userRatingScore,
           Genre: data.Genre,
           Released: data.Released,
           Plot: data.Plot,
+          imdbID: data.imdbID,
         });
       })
       .catch((err) => {
@@ -56,17 +53,16 @@ function MoviePreview({ imdbId, setWatchedList }: MoviePreviewProps) {
         } else console.log(err);
       });
     return () => {
-      console.log("CLEANUP FUNCTION CALLED!");
       cancelToken.cancel("Canceling");
       setMovieObj(null);
-      setUserRatingScore(null);
     };
-  }, [setMovieObj, imdbId]);
+  }, [setMovieObj, imdbId, userRatingScore]);
 
   if (!movieObj)
     return (
       <img
-        src="spinner.svg"
+        src={spinner}
+        alt="Loading..."
         style={{
           alignSelf: "center",
           position: "relative",
@@ -74,11 +70,23 @@ function MoviePreview({ imdbId, setWatchedList }: MoviePreviewProps) {
         }}
       />
     );
-
+  console.log(movieObj);
   return (
     <div className={styles.preview}>
       <header className={styles.header}>
         <div className={styles.imageContainer}>
+          <button
+            className={buttonStyles.closeButton}
+            onClick={() => setSelectedMovieId(null)}
+            style={{
+              marginRight: 0,
+              marginLeft: "0.3em",
+              alignSelf: "flex-start",
+              opacity: "0.9",
+            }}
+          >
+            &larr;
+          </button>
           <img
             src={movieObj.Poster}
             alt={movieObj.Title}
@@ -98,13 +106,17 @@ function MoviePreview({ imdbId, setWatchedList }: MoviePreviewProps) {
       </header>
       <main className={styles.main}>
         <Rating
-          userRatingScore={userRatingScore}
+          userRatingScore={userRating || userRatingScore}
           setUserRatingScore={setUserRatingScore}
         >
           <AddToWatchedList
             movieObj={movieObj}
             setWatchedList={setWatchedList}
-          />
+            setSelectedId={setSelectedMovieId}
+            userRating={userRating}
+          >
+            {!userRating ? "Add to list" : "In your watched list"}
+          </AddToWatchedList>
         </Rating>
         <p>{movieObj.Plot}</p>
       </main>

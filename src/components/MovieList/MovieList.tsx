@@ -37,13 +37,13 @@ function MovieList({
               <>
                 <p>⭐️ {movie.imdbRating}</p>
                 <p>🌟 {movie.userRating}</p>
-                <p>⏳ {movie.runtime} min</p>
+                <p>⏳ {movie.runtime}</p>
               </>
             ) : (
               <p>🗓️ {movie.Year}</p>
             )
           }
-          key={movie.imdbID}
+          key={movie.imdbID ?? movie.imdbRating}
           imbdID={movie.imdbID}
           setSelectedMovieId={setSelectedMovieId}
         />

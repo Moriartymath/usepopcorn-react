@@ -1,21 +1,35 @@
 import styles from "./AddToWatchedList.module.css";
+import MovieType from "../../../../Types/MovieType";
 
 type AddToWatchedListProps = {
-  movieObj: {};
+  movieObj: MovieType;
   setWatchedList: Function;
+  children: string;
+  userRating: number;
+  setSelectedId: Function;
 };
 
-function AddToWatchedList({ movieObj, setWatchedList }: AddToWatchedListProps) {
+function AddToWatchedList({
+  movieObj,
+  setWatchedList,
+  children,
+  userRating,
+  setSelectedId,
+}: AddToWatchedListProps) {
   return (
     <button
-      className={styles.addToList}
-      onClick={() =>
-        setWatchedList((list: Array<any>) =>
-          !list.some((movie) => movie === movieObj) ? [...list, movieObj] : list
-        )
-      }
+      className={!userRating ? styles.addToList : styles.message}
+      onClick={() => {
+        if (userRating) setSelectedId(null);
+        else
+          setWatchedList((list: Array<any>) =>
+            !list.some((movie) => movie.imdbID === movieObj.imdbID)
+              ? [...list, movieObj]
+              : list
+          );
+      }}
     >
-      Add to list
+      {children}
     </button>
   );
 }

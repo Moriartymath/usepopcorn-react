@@ -8,7 +8,7 @@ function BoxLayout({ children }) {
   return (
     <div className={styles.box}>
       <ColapseButton isOpen={isOpen} setIsOpen={setIsOpen} />
-      {children}
+      {isOpen && children}
     </div>
   );
 }
