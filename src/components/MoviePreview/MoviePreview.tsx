@@ -46,6 +46,7 @@ function MoviePreview({
           imdbID: data.imdbID,
           Director: data.Director,
         });
+        document.title = res.data.Title;
       })
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -56,6 +57,8 @@ function MoviePreview({
       cancelToken.cancel("Canceling");
       setMovieObj(null);
       setUserRatingScore(null);
+      document.title = "usePopcorn";
+      console.log("MOVIE PREVIEW UNMOUNT!");
     };
   }, [setMovieObj, imdbId]);
 
@@ -123,11 +126,11 @@ function MoviePreview({
             <AddToWatchedList
               movieObj={movieObj}
               setWatchedList={setWatchedList}
-              userRating={userRatingScore}
             />
           </Rating>
         )}
         <p>{movieObj.Plot}</p>
+        <p>Directed by {movieObj.Director}</p>
       </main>
     </div>
   );

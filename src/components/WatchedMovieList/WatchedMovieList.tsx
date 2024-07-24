@@ -18,23 +18,23 @@ function WatchedMovieList({
   watchedMovieList,
   setSelectedMovieId,
 }: WatchedMovieListProps) {
-  const avrgDuration = watchedMovieList.reduce(
-    (acc, movie) =>
-      acc + Number(movie.runtime.split(" ")[0]) / watchedMovieList.length,
-    0
-  );
+  const avrgDuration = watchedMovieList
+    .reduce(
+      (acc, movie) =>
+        acc + Number(movie.runtime.split(" ")[0]) / watchedMovieList.length,
+      0
+    )
+    .toFixed(1);
 
   const moviesAmount = watchedMovieList.length;
 
-  const avrgImdbRating = watchedMovieList.reduce(
-    (acc, movie) => acc + movie.imdbRating / watchedMovieList.length,
-    0
-  );
+  const avrgImdbRating = watchedMovieList
+    .reduce((acc, movie) => acc + movie.imdbRating / watchedMovieList.length, 0)
+    .toFixed(1);
 
-  const avrgUserRating = watchedMovieList.reduce(
-    (acc, movie) => acc + movie.userRating / watchedMovieList.length,
-    0
-  );
+  const avrgUserRating = watchedMovieList
+    .reduce((acc, movie) => acc + movie.userRating / watchedMovieList.length, 0)
+    .toFixed(1);
 
   return (
     <>

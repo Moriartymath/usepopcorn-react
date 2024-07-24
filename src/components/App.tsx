@@ -67,7 +67,7 @@ function App() {
     <div className={styles.App}>
       <SearchBar>
         <SearchInput inputText={inputText} setInputText={setInputText} />
-        <SearchStats amount={0} />
+        <SearchStats amount={movieList.length} />
       </SearchBar>
       <main className={styles.main}>
         <BoxLayout>

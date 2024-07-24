@@ -4,17 +4,12 @@ import MovieType from "../../../../Types/MovieType";
 type AddToWatchedListProps = {
   movieObj: MovieType;
   setWatchedList: Function;
-  userRating: number;
 };
 
-function AddToWatchedList({
-  movieObj,
-  setWatchedList,
-  userRating,
-}: AddToWatchedListProps) {
+function AddToWatchedList({ movieObj, setWatchedList }: AddToWatchedListProps) {
   return (
     <button
-      className={!userRating ? styles.addToList : styles.message}
+      className={styles.addToList}
       onClick={() =>
         setWatchedList((list: Array<any>) =>
           !list.some((movie) => movie.imdbID === movieObj.imdbID)

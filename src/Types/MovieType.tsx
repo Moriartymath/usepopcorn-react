@@ -9,6 +9,7 @@ type MovieObj = {
   Genre: string;
   Released: string;
   Plot: string;
+  Director: string;
 };
 
 export default MovieObj;
