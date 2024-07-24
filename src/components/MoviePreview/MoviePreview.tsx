@@ -22,10 +22,9 @@ function MoviePreview({
 }: MoviePreviewProps) {
   const [userRatingScore, setUserRatingScore] = useState(null);
   const [movieObj, setMovieObj] = useState(null) as [MovieType, Function];
-  console.log(userRating);
+
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
-    console.log(userRatingScore);
 
     axios
       .get(`http://www.omdbapi.com/?apikey=120a7fbf&i=${imdbId}`, {
@@ -40,11 +39,12 @@ function MoviePreview({
           Poster: data.Poster,
           runtime: data.Runtime,
           imdbRating: data.imdbRating,
-          userRating: userRating || userRatingScore,
           Genre: data.Genre,
+          userRating: userRating || userRatingScore,
           Released: data.Released,
           Plot: data.Plot,
           imdbID: data.imdbID,
+          Director: data.Director,
         });
       })
       .catch((err) => {
@@ -55,8 +55,16 @@ function MoviePreview({
     return () => {
       cancelToken.cancel("Canceling");
       setMovieObj(null);
+      setUserRatingScore(null);
     };
-  }, [setMovieObj, imdbId, userRatingScore]);
+  }, [setMovieObj, imdbId]);
+
+  useEffect(() => {
+    if (movieObj)
+      setMovieObj((currObj) => {
+        return { ...currObj, userRating: userRatingScore };
+      });
+  }, [userRatingScore]);
 
   if (!movieObj)
     return (
@@ -70,7 +78,7 @@ function MoviePreview({
         }}
       />
     );
-  console.log(movieObj);
+
   return (
     <div className={styles.preview}>
       <header className={styles.header}>
@@ -105,19 +113,20 @@ function MoviePreview({
         </div>
       </header>
       <main className={styles.main}>
-        <Rating
-          userRatingScore={userRating || userRatingScore}
-          setUserRatingScore={setUserRatingScore}
-        >
-          <AddToWatchedList
-            movieObj={movieObj}
-            setWatchedList={setWatchedList}
-            setSelectedId={setSelectedMovieId}
-            userRating={userRating}
+        {userRating ? (
+          <p>You rated this movie {userRating} ⭐️</p>
+        ) : (
+          <Rating
+            userRatingScore={userRating || userRatingScore}
+            setUserRatingScore={setUserRatingScore}
           >
-            {!userRating ? "Add to list" : "In your watched list"}
-          </AddToWatchedList>
-        </Rating>
+            <AddToWatchedList
+              movieObj={movieObj}
+              setWatchedList={setWatchedList}
+              userRating={userRatingScore}
+            />
+          </Rating>
+        )}
         <p>{movieObj.Plot}</p>
       </main>
     </div>

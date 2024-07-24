@@ -7,7 +7,7 @@ type WatchedMovieListProps = {
     Title: string;
     Year: string;
     Poster: string;
-    runtime: number;
+    runtime: string;
     imdbRating: number;
     userRating: number;
   }>;
@@ -19,7 +19,8 @@ function WatchedMovieList({
   setSelectedMovieId,
 }: WatchedMovieListProps) {
   const avrgDuration = watchedMovieList.reduce(
-    (acc, movie) => acc + movie.runtime / watchedMovieList.length,
+    (acc, movie) =>
+      acc + Number(movie.runtime.split(" ")[0]) / watchedMovieList.length,
     0
   );
 
