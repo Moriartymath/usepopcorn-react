@@ -23,6 +23,10 @@ function MoviePreview({
   const [userRatingScore, setUserRatingScore] = useState(null);
   const [movieObj, setMovieObj] = useState(null) as [MovieType, Function];
 
+  function handleClosePreview() {
+    setSelectedMovieId(null);
+  }
+
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
 
@@ -58,7 +62,6 @@ function MoviePreview({
       setMovieObj(null);
       setUserRatingScore(null);
       document.title = "usePopcorn";
-      console.log("MOVIE PREVIEW UNMOUNT!");
     };
   }, [setMovieObj, imdbId]);
 
@@ -68,6 +71,18 @@ function MoviePreview({
         return { ...currObj, userRating: userRatingScore };
       });
   }, [userRatingScore]);
+
+  useEffect(() => {
+    const handlerEscape = function (ev) {
+      console.log(ev.key);
+      if (ev.key === "Escape") handleClosePreview();
+    };
+    document.body.addEventListener("keydown", handlerEscape);
+
+    return () => {
+      document.body.removeEventListener("keydown", handlerEscape);
+    };
+  }, []);
 
   if (!movieObj)
     return (
