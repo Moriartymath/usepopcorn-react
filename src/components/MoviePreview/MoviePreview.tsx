@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./MoviePreview.module.css";
 import Rating from "./Rating/Rating.tsx";
 import AddToWatchedList from "./Rating/AddToWatchedList/AddToWatchedList.tsx";
@@ -22,10 +22,22 @@ function MoviePreview({
 }: MoviePreviewProps) {
   const [userRatingScore, setUserRatingScore] = useState(null);
   const [movieObj, setMovieObj] = useState(null) as [MovieType, Function];
+  const evalAmount = useRef({ imdbId, ratingDecisionAmount: 0 });
 
   function handleClosePreview() {
     setSelectedMovieId(null);
   }
+
+  useEffect(() => {
+    if (userRatingScore !== null) {
+      evalAmount.current.ratingDecisionAmount += 1;
+      console.log(evalAmount);
+    }
+    return () => {
+      if (imdbId !== evalAmount.current.imdbId)
+        evalAmount.current = { imdbId, ratingDecisionAmount: 0 };
+    };
+  }, [userRatingScore, imdbId]);
 
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
@@ -120,7 +132,7 @@ function MoviePreview({
           />
         </div>
         <div className={styles.shortDescripton}>
-          <h2>{movieObj.Title}</h2>
+          <h3>{movieObj.Title}</h3>
           <div className={styles.movieInfo}>
             <p>
               {movieObj.Released} · {movieObj.runtime}

@@ -1,5 +1,5 @@
 import styles from "./App.module.css";
-import { CSSProperties, useEffect, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import MovieList from "./MovieList/MovieList.tsx";
 import SearchBar from "./SearchBar/SearchBar.tsx";
 import WatchedMovieList from "./WatchedMovieList/WatchedMovieList.tsx";
@@ -7,9 +7,9 @@ import MoviePreview from "./MoviePreview/MoviePreview.tsx";
 import SearchInput from "./SearchBar/SearchInput/SearchInput.tsx";
 import SearchStats from "./SearchBar/SearchStats/SearchStats.tsx";
 import BoxLayout from "./BoxLayout/BoxLayout.tsx";
-import axios from "axios";
-import spinner from "../assets/spinner.svg";
 import Loader from "./Loader/Loader.tsx";
+import { useMovies } from "../hooks/useMovies.ts";
+import { useLocalStorageState } from "../hooks/useLocalStorageState.ts";
 
 const textStyle = {
   color: "white",
@@ -21,52 +21,38 @@ const textStyle = {
 function App() {
   const [inputText, setInputText] = useState("");
   const [selectMovieId, setSelectedMovieId] = useState(null);
-  const [watchedList, setWatchedList] = useState([]);
-  const [movieList, setMovieList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [netError, setNetError] = useState(null);
-  const [moviesFound, setMoviesFound] = useState(true);
+  const [watchedList, setWatchedList] = useLocalStorageState(
+    [],
+    "watchedMovies"
+  );
+  const inputElement = useRef(null) as { current: HTMLInputElement };
+
+  const { movieList, isLoading, moviesFound, setMovieList, netError } =
+    useMovies({ query: inputText });
 
   useEffect(() => {
-    const cancelToken = axios.CancelToken.source();
-
-    const fetchMovies = async function () {
-      try {
-        if (inputText && !netError) setIsLoading(true);
-
-        const res = await axios.get(
-          `http://www.omdbapi.com/?apikey=120a7fbf&s=${inputText}`,
-          {
-            cancelToken: cancelToken.token,
-          }
-        );
-
-        setNetError(null);
-        setMovieList(res.data.Error ? [] : res.data.Search);
-        setMoviesFound(res.data.Error ? false : true);
-      } catch (err) {
-        if (axios.isCancel(err)) console.log("Canceling!");
-        else {
-          console.log(err);
-          setNetError("You are offline 😿");
-        }
-      } finally {
-        setIsLoading(false);
+    function handler(ev) {
+      if (ev.key === "Enter") {
+        if (document.activeElement !== inputElement.current) {
+          setInputText("");
+          setMovieList([]);
+          inputElement.current.focus();
+        } else console.log("ALready focused");
       }
-    };
+    }
+    document.addEventListener("keydown", handler);
 
-    fetchMovies();
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
 
-    return () => {
-      cancelToken.cancel("Cancelled!");
-      setMovieList([]);
-    };
-  }, [inputText, setMovieList]);
-  console.log(watchedList);
   return (
     <div className={styles.App}>
       <SearchBar>
-        <SearchInput inputText={inputText} setInputText={setInputText} />
+        <SearchInput
+          inputText={inputText}
+          setInputText={setInputText}
+          inputRef={inputElement}
+        />
         <SearchStats amount={movieList.length} />
       </SearchBar>
       <main className={styles.main}>

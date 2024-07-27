@@ -24,7 +24,7 @@ function Movie({
         <img src={poster} alt={title} className={styles.image} />
       </div>
       <div className={styles.movieShortDescr}>
-        <h3>{title}</h3>
+        <h4>{title}</h4>
         <div className={styles.movieStats}>{stats}</div>
       </div>
       {deleteButton ? deleteButton : null}
