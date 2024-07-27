@@ -6,6 +6,7 @@ import axios from "axios";
 import spinner from "../../assets/spinner.svg";
 import buttonStyles from "../ColapseButton/ColapseButton.module.css";
 import MovieType from "../../Types/MovieType.tsx";
+import { useKeyPress } from "../../hooks/useKeyPress.ts";
 
 type MoviePreviewProps = {
   imdbId: string;
@@ -48,7 +49,6 @@ function MoviePreview({
       })
       .then((res) => {
         const data = res.data;
-        console.log(data);
         setMovieObj({
           Title: data.Title,
           Year: data.Year,
@@ -84,17 +84,7 @@ function MoviePreview({
       });
   }, [userRatingScore]);
 
-  useEffect(() => {
-    const handlerEscape = function (ev) {
-      console.log(ev.key);
-      if (ev.key === "Escape") handleClosePreview();
-    };
-    document.body.addEventListener("keydown", handlerEscape);
-
-    return () => {
-      document.body.removeEventListener("keydown", handlerEscape);
-    };
-  }, []);
+  useKeyPress("Escape", handleClosePreview);
 
   if (!movieObj)
     return (

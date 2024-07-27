@@ -10,6 +10,7 @@ import BoxLayout from "./BoxLayout/BoxLayout.tsx";
 import Loader from "./Loader/Loader.tsx";
 import { useMovies } from "../hooks/useMovies.ts";
 import { useLocalStorageState } from "../hooks/useLocalStorageState.ts";
+import { useKeyPress } from "../hooks/useKeyPress.ts";
 
 const textStyle = {
   color: "white",
@@ -28,22 +29,15 @@ function App() {
   const inputElement = useRef(null) as { current: HTMLInputElement };
 
   const { movieList, isLoading, moviesFound, setMovieList, netError } =
-    useMovies({ query: inputText });
+    useMovies(inputText);
 
-  useEffect(() => {
-    function handler(ev) {
-      if (ev.key === "Enter") {
-        if (document.activeElement !== inputElement.current) {
-          setInputText("");
-          setMovieList([]);
-          inputElement.current.focus();
-        } else console.log("ALready focused");
-      }
+  useKeyPress("Enter", () => {
+    if (document.activeElement !== inputElement.current) {
+      setInputText("");
+      setMovieList([]);
+      inputElement.current.focus();
     }
-    document.addEventListener("keydown", handler);
-
-    return () => document.removeEventListener("keydown", handler);
-  }, []);
+  });
 
   return (
     <div className={styles.App}>

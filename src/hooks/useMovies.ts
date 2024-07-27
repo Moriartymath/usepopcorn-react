@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-type useMoviesParams = {
-  query: string;
-};
-
-export function useMovies({ query }: useMoviesParams) {
+export function useMovies(query: string) {
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [netError, setNetError] = useState(null);
